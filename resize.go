@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"image/jpeg"
+	"image/png"
 	"io/ioutil"
 	"log"
 	"os"
@@ -81,6 +82,10 @@ func main() {
 				if strings.HasSuffix(file.Name(), ".JPG") || strings.HasSuffix(file.Name(), ".jpg") || strings.HasSuffix(file.Name(), ".JPEG") || strings.HasSuffix(file.Name(), ".jpeg") {
 					resizeJpeg(dir.Name()+"/originals", file, dimensions)
 				}
+
+				if strings.HasSuffix(file.Name(), ".PNG") || strings.HasSuffix(file.Name(), ".png") {
+					resizePng(dir.Name()+"/originals", file, dimensions)
+				}
 			}
 		}
 
@@ -96,7 +101,7 @@ func resizeJpeg(folder string, fileInfo os.FileInfo, dimensions int) {
 	exists, err := pathExists(newFolder)
 
 	if !exists {
-		os.Mkdir(newFolder, 0766)
+		os.Mkdir(newFolder, 0755)
 	}
 
 	img, err := jpeg.Decode(file)
@@ -108,6 +113,29 @@ func resizeJpeg(folder string, fileInfo os.FileInfo, dimensions int) {
 	defer out.Close()
 
 	jpeg.Encode(out, m, nil)
+}
+
+func resizePng(folder string, fileInfo os.FileInfo, dimensions int) {
+	file, err := os.Open(folder + "/" + fileInfo.Name())
+	check(err)
+	defer file.Close()
+
+	newFolder := strings.Replace(folder, "originals", strconv.Itoa(dimensions), 1)
+	exists, err := pathExists(newFolder)
+
+	if !exists {
+		os.Mkdir(newFolder, 0755)
+	}
+
+	img, err := png.Decode(file)
+	check(err)
+
+	m := resize.Resize(uint(dimensions), 0, img, resize.Lanczos3)
+	out, err := os.Create(newFolder + "/" + fileInfo.Name())
+	check(err)
+	defer out.Close()
+
+	png.Encode(out, m)
 }
 
 func check(err error) {
