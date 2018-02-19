@@ -1,5 +1,1 @@
-/*
-!.gitignore
-!resize.go
-!readme.md
-!internal/
+/testdata/

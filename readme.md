@@ -1,5 +1,18 @@
 # Image resizer CLI-Util für Prämienshop
 
+Erwartet folgende Struktur für die Bilder
+
+```
+- Zielordner/
+  - [xyz]/
+    - originals/
+      - Quelldateien ...
+      - Quelldateien ...
+    - [dimensionen]/
+    - .../
+  - [abc]/
+```
+
 zum compilieren für TOB-Server
 
 ```bash

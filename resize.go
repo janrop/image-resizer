@@ -10,6 +10,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"./internal/imageHelper"
 )
 
 func inArray(v interface{}, in interface{}) (ok bool, i int) {
@@ -25,8 +27,19 @@ func inArray(v interface{}, in interface{}) (ok bool, i int) {
 	return
 }
 
+func getPath() (path string) {
+	for _, arg := range os.Args[1:] {
+		if strings.Contains(arg, "/") {
+			path = arg
+			return
+		}
+	}
+	path = "."
+	return
+}
+
 func dimensionsInArgs() (dimensions int, err error) {
-	for _, arg := range os.Args {
+	for _, arg := range os.Args[1:] {
 		if intVal, err2 := strconv.Atoi(arg); err2 == nil {
 			dimensions = intVal
 			return
@@ -52,7 +65,8 @@ func main() {
 		return
 	}
 
-	dirs, err := ioutil.ReadDir(".")
+	path := getPath()
+	dirs, err := ioutil.ReadDir(path)
 	check(err)
 
 	for _, dir := range dirs {
@@ -60,9 +74,11 @@ func main() {
 			continue
 		}
 
-		fmt.Println("Processing directory", dir.Name())
+		if inArgs("-v") {
+			fmt.Println("Processing directory", dir.Name())
+		}
 
-		files, err := ioutil.ReadDir(dir.Name() + "/originals")
+		files, err := ioutil.ReadDir(path + "/" + dir.Name() + "/originals")
 		check(err)
 
 		for _, file := range files {
@@ -76,11 +92,11 @@ func main() {
 				}
 
 				if strings.HasSuffix(file.Name(), ".JPG") || strings.HasSuffix(file.Name(), ".jpg") || strings.HasSuffix(file.Name(), ".JPEG") || strings.HasSuffix(file.Name(), ".jpeg") {
-					resize.resizeJpeg(dir.Name()+"/originals", file, dimensions)
+					imageHelper.ResizeJpeg(path+"/"+dir.Name()+"/originals", file, dimensions)
 				}
 
 				if strings.HasSuffix(file.Name(), ".PNG") || strings.HasSuffix(file.Name(), ".png") {
-					resize.resizePng(dir.Name()+"/originals", file, dimensions)
+					imageHelper.ResizePng(path+"/"+dir.Name()+"/originals", file, dimensions)
 				}
 			}
 		}

@@ -1,4 +1,4 @@
-package resize
+package imageHelper
 
 import (
 	"image/jpeg"
@@ -11,7 +11,8 @@ import (
 	"github.com/nfnt/resize"
 )
 
-func resizeJpeg(folder string, fileInfo os.FileInfo, dimensions int) {
+// ResizeJpeg speichert JPEG um
+func ResizeJpeg(folder string, fileInfo os.FileInfo, dimensions int) {
 	file, err := os.Open(folder + "/" + fileInfo.Name())
 	check(err)
 	defer file.Close()
@@ -34,7 +35,8 @@ func resizeJpeg(folder string, fileInfo os.FileInfo, dimensions int) {
 	jpeg.Encode(out, m, nil)
 }
 
-func resizePng(folder string, fileInfo os.FileInfo, dimensions int) {
+// ResizePng speichert PNG um
+func ResizePng(folder string, fileInfo os.FileInfo, dimensions int) {
 	file, err := os.Open(folder + "/" + fileInfo.Name())
 	check(err)
 	defer file.Close()
