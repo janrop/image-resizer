@@ -2,7 +2,7 @@
 
 ```bash
 Usage: 
-  resize [int] # To resize all pictures with a max width and height of 400")
+  resize [int] # To resize all pictures with a max width of [int]
           -v Verbose output
 ```
 
