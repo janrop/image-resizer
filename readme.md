@@ -1,13 +1,19 @@
 # Image resizer CLI-Util
 
-Erwartet folgende Struktur für die Bilder
+```bash
+Usage: 
+  resize [int] # To resize all pictures with a max width and height of 400")
+          -v Verbose output
+```
+
+Erwartet folgende Ordner-Struktur
 
 ```
 - Zielordner/
   - [xyz]/
     - originals/
-      - Quelldateien ...
-      - Quelldateien ...
+      - [Quelldatei].jpg ...
+      - [Quelldateien].png ...
     - [dimensionen]/
     - .../
   - [abc]/

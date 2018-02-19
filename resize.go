@@ -60,8 +60,8 @@ func main() {
 	dimensions, err := dimensionsInArgs()
 	if err != nil {
 		fmt.Println("Usage: ")
-		fmt.Println("  resize 400 # To resize all pictures with a max width and height of 400")
-		fmt.Println("             -v Verbose")
+		fmt.Println("  resize [int] # To resize all pictures with a max width and height of 400")
+		fmt.Println("          -v Verbose output")
 		return
 	}
 
