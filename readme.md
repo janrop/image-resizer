@@ -1,4 +1,4 @@
-# Image resizer CLI-Util für Prämienshop
+# Image resizer CLI-Util
 
 Erwartet folgende Struktur für die Bilder
 
@@ -13,7 +13,7 @@ Erwartet folgende Struktur für die Bilder
   - [abc]/
 ```
 
-zum compilieren für TOB-Server
+zum compilieren für Linux
 
 ```bash
 env GOOS=linux GOARCH=amd64 go build -v
