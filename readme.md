@@ -2,14 +2,17 @@
 
 ```bash
 Usage: 
-  resize [int] # To resize all pictures with a max width of [int]
+  resize
+          -w [int] (required) Resize all pictures to a max width of [int]
+          -t [int] Only resize files older than [int] seconds
           -v Verbose output
+          [target_directory] to resize files in (default: ./)
 ```
 
 Erwartet folgende Ordner-Struktur
 
 ```
-- Zielordner/
+- Target-Directory/
   - [xyz]/
     - originals/
       - [Quelldatei].jpg ...
@@ -17,10 +20,4 @@ Erwartet folgende Ordner-Struktur
     - [dimensionen]/
     - .../
   - [abc]/
-```
-
-zum compilieren für Linux
-
-```bash
-env GOOS=linux GOARCH=amd64 go build -v
 ```

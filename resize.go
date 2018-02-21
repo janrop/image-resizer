@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -38,31 +37,32 @@ func getPath() (path string) {
 	return
 }
 
-func dimensionsInArgs() (dimensions int, err error) {
-	for _, arg := range os.Args[1:] {
-		if intVal, err2 := strconv.Atoi(arg); err2 == nil {
-			dimensions = intVal
-			return
-		}
-	}
-	err = errors.New("error message")
-	return
-}
-
 func inArgs(val string) (ok bool) {
-	ok, _ = inArray(val, os.Args)
+	ok, _ = inArray(val, os.Args[1:])
 	return
 }
 
 func main() {
 
-	//os.Mkdir(PATH, 0666)
-	dimensions, err := dimensionsInArgs()
-	if err != nil {
+	dimensionsInArgs, j := inArray("-w", os.Args)
+
+	if !dimensionsInArgs {
 		fmt.Println("Usage: ")
-		fmt.Println("  resize [int] # To resize all pictures with a max width of [int]")
+		fmt.Println("  resize  ")
+		fmt.Println("          -w (required) [int] Resize all pictures to a max width of [int]")
+		fmt.Println("          -t [int] Only resize files older than [int] seconds")
 		fmt.Println("          -v Verbose output")
+		fmt.Println("          [target_directory] to resize files in (default: ./)")
 		return
+	}
+
+	dimensions, err := strconv.Atoi(os.Args[j+1])
+	check(err)
+
+	timeSpecified, i := inArray("-t", os.Args)
+	var fileEditedSince int64
+	if timeSpecified {
+		fileEditedSince, _ = strconv.ParseInt(os.Args[i+1], 10, 64)
 	}
 
 	path := getPath()
@@ -86,9 +86,13 @@ func main() {
 				fmt.Println("  Processing file", file.Name(), file.ModTime().Format("Mon 2 Jan 2006 15:04"))
 			}
 
-			if file.ModTime().Unix() > (time.Now().Unix() - 60*60*8) {
+			if !timeSpecified || file.ModTime().Unix() > (time.Now().Unix()-fileEditedSince) {
 				if inArgs("-v") {
-					fmt.Println("    -> new enough")
+					if timeSpecified {
+						fmt.Println("    -> new enough, resizing")
+					} else {
+						fmt.Println("    -> resizing")
+					}
 				}
 
 				if strings.HasSuffix(file.Name(), ".JPG") || strings.HasSuffix(file.Name(), ".jpg") || strings.HasSuffix(file.Name(), ".JPEG") || strings.HasSuffix(file.Name(), ".jpeg") {
