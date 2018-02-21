@@ -9,15 +9,15 @@ Usage:
           [target_directory] to resize files in (default: ./)
 ```
 
-Erwartet folgende Ordner-Struktur
+Expects the following directory structure and creates additional [dimension]-folders in every sub-directory of [target_directory]
 
 ```
-- Target-Directory/
+- target_directory/
   - [xyz]/
     - originals/
       - [Quelldatei].jpg ...
       - [Quelldateien].png ...
-    - [dimensionen]/
+    - [dimension]/
     - .../
   - [abc]/
 ```
