@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"./internal/imageHelper"
+	"github.com/janrop/image-resizer/internal/imageHelper"
 )
 
 func inArray(v interface{}, in interface{}) (ok bool, i int) {
@@ -43,6 +43,10 @@ func inArgs(val string) (ok bool) {
 }
 
 func main() {
+
+	defer func() {
+		fmt.Println(recover())
+	}()
 
 	dimensionsInArgs, j := inArray("-w", os.Args)
 

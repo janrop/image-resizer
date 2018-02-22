@@ -1,9 +1,9 @@
 package imageHelper
 
 import (
+	"fmt"
 	"image/jpeg"
 	"image/png"
-	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -13,12 +13,20 @@ import (
 
 // ResizeJpeg speichert JPEG um
 func ResizeJpeg(folder string, fileInfo os.FileInfo, dimensions int) {
+
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Panic: ", recover())
+		}
+	}()
+
 	file, err := os.Open(folder + "/" + fileInfo.Name())
 	check(err)
 	defer file.Close()
 
 	newFolder := strings.Replace(folder, "originals", strconv.Itoa(dimensions), 1)
 	exists, err := pathExists(newFolder)
+	check(err)
 
 	if !exists {
 		os.Mkdir(newFolder, 0755)
@@ -37,12 +45,20 @@ func ResizeJpeg(folder string, fileInfo os.FileInfo, dimensions int) {
 
 // ResizePng speichert PNG um
 func ResizePng(folder string, fileInfo os.FileInfo, dimensions int) {
+
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Panic: ", recover())
+		}
+	}()
+
 	file, err := os.Open(folder + "/" + fileInfo.Name())
 	check(err)
 	defer file.Close()
 
 	newFolder := strings.Replace(folder, "originals", strconv.Itoa(dimensions), 1)
 	exists, err := pathExists(newFolder)
+	check(err)
 
 	if !exists {
 		os.Mkdir(newFolder, 0755)
@@ -72,6 +88,6 @@ func pathExists(path string) (bool, error) {
 
 func check(err error) {
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 }
